@@ -1,8 +1,10 @@
 package student.crazyeights;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerStrategyTwo implements PlayerStrategy {
+    private List<Card> cardsInHand = new ArrayList<Card>();
     public void init(int playerId, List<Integer> opponentIds) {
 
     }
