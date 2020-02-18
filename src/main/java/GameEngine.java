@@ -3,7 +3,6 @@ import student.crazyeights.*;
 import java.util.*;
 
 public class GameEngine {
-    //draw pile
     private List<Card> drawPile = new ArrayList<>();
     private List<Card> discardPile = new ArrayList<>();
     private Map<PlayerStrategy, List<Card>> mapOfPlayersToCards = new HashMap<>();
@@ -63,7 +62,7 @@ public class GameEngine {
         for (PlayerStrategy player: listOfPlayers) {
             List<Card> initialCards = new ArrayList<>();
             for (int i = 0; i < NUMBER_INITIAL_CARDS; i++) {
-                initialCards.add(drawPile.remove(i));
+                initialCards.add(drawPile.remove(0));
             }
             player.receiveInitialCards(initialCards);
             mapOfPlayersToCards.put(player, initialCards);
@@ -83,7 +82,8 @@ public class GameEngine {
         } else {
             Random random = new Random();
             //reshuffling the 8
-            drawPile.add(random.nextInt(), drawPile.get(0));
+            int randomIndex = random.nextInt(drawPile.size());
+            drawPile.add(randomIndex, drawPile.get(0));
             discardPile.add(drawPile.remove(0));
             //top pile card is the top of the discard pile
             topCard = discardPile.get(0);
@@ -96,8 +96,11 @@ public class GameEngine {
      * then they play a card and its added to the top of the discard pile, and updates the top card
      */
     public void playRound() {
+        if (drawPile.size() == 0) {
+            checkGameOver();
+        }
         for (PlayerStrategy player: listOfPlayers) {
-            if (player.shouldDrawCard(topCard, currentSuit)) {
+            if (player.shouldDrawCard(topCard, currentSuit) && drawPile.size() != 0) {
                 player.receiveCard(drawPile.remove(0));
             } else {
                 Card playedCard = player.playCard();
@@ -124,6 +127,7 @@ public class GameEngine {
                 addPointsToPlayer(player);
                 //resets the game
                 resetGame();
+                System.out.println("SOMEONE WON A GAME!!!!");
                 return true;
             }
         }
@@ -165,7 +169,8 @@ public class GameEngine {
     public PlayerStrategy checkTournamentWinner() {
         for (PlayerStrategy player: listOfPlayers) {
             if (mapOfPlayersToPoints.get(player) > 200) {
-                System.out.println(player.toString() + " wins!");
+                System.out.println(player.toString() + " wins the TOURNAMENT with " +
+                        mapOfPlayersToPoints.get(player) + " points!");
                 return player;
             }
         }

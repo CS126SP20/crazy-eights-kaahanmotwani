@@ -20,7 +20,7 @@ public class PlayerStrategyOne extends GeneralStrategy {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public Card.Suit declareSuit() {
