@@ -11,5 +11,4 @@ public class PlayerStrategyOne extends GeneralStrategy {
     public Card.Suit declareSuit() {
         return null;
     }
-
 }

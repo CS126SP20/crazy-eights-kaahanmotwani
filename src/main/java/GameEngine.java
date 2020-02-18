@@ -14,6 +14,7 @@ public class GameEngine {
     private PlayerStrategyTwo playerD = new PlayerStrategyTwo();
     private List<PlayerStrategy> listOfPlayers = new ArrayList<>(Arrays.asList(playerA, playerB, playerC, playerD));
     private static final int NUMBER_INITIAL_CARDS = 5;
+    private static final int TOURNAMENT_WINNING_THRESHOLD = 200;
 
     /**
      * Starts a new tournament by assigning playerIds and giving each player 0 points
@@ -26,7 +27,9 @@ public class GameEngine {
         for (PlayerStrategy player: listOfPlayers) {
             mapOfPlayersToPoints.put(player, 0);
         }
-        startGame();
+        while (checkTournamentWinner() == null) {
+            startGame();
+        }
     }
     /**
      * Starts a new game initially and assigns playerIds
@@ -35,7 +38,10 @@ public class GameEngine {
         shuffleCards();
         dealInitialCards();
         playTournament();
-        startRounds();
+        checkGameOver();
+//        if (checkTournamentWinner() != null) {
+//            System.out.println(checkTournamentWinner().toString() + "wins!");
+//        }
     }
     /**
      * Shuffles an unshuffled deck of cards
@@ -79,17 +85,17 @@ public class GameEngine {
     /**
      *
      */
-    public void startRounds() {
+    public void checkGameOver() {
         //if players discarded all of their cards, they get points from the other player cards' totals
         //Case of a tie (if the draw pile runs out and no one empties their hand), adds points of other players
         for (PlayerStrategy player: listOfPlayers) {
+            //if hand is empty, else-if draw pile is empty; in both cases players win points
             if (mapOfPlayersToCards.get(player).size() == 0) {
                 addPointsToPlayer(player);
             } else if (drawPile.isEmpty()) {
                 addPointsToPlayer(player);
             }
         }
-
     }
 
     /**
@@ -108,7 +114,7 @@ public class GameEngine {
     }
 
     /**
-     * 
+     *
      * @param cards
      * @return
      */
@@ -118,5 +124,18 @@ public class GameEngine {
             points += cards.get(i).getPointValue();
         }
         return points;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public PlayerStrategy checkTournamentWinner() {
+        for (PlayerStrategy player: listOfPlayers) {
+            if (mapOfPlayersToPoints.get(player) > 200) {
+                return player;
+            }
+        }
+        return null;
     }
 }
