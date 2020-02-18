@@ -68,7 +68,6 @@ public class GameEngine {
             player.receiveInitialCards(initialCards);
             mapOfPlayersToCards.put(player, initialCards);
         }
-        discardPile = drawPile;
     }
 
     /**

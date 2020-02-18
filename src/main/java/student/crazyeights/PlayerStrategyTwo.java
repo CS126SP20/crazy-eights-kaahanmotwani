@@ -5,10 +5,10 @@ import java.util.List;
 
 public class PlayerStrategyTwo extends GeneralStrategy {
     public Card playCard() {
-        return null;
+        return playerCards.get(0);
     }
 
     public Card.Suit declareSuit() {
-        return null;
+        return playerCards.get(0).getSuit();
     }
 }
