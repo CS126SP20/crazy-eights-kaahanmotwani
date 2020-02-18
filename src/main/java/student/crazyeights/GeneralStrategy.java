@@ -5,7 +5,7 @@ import java.util.List;
 public abstract class GeneralStrategy implements PlayerStrategy {
     private int playerId;
     private List<Integer> opponentIds;
-    private List<Card> playerCards;
+    protected List<Card> playerCards;
     public void init(int playerId, List<Integer> opponentIds) {
         this.playerId = playerId;
         this.opponentIds = opponentIds;
@@ -44,6 +44,6 @@ public abstract class GeneralStrategy implements PlayerStrategy {
     }
 
     public void reset() {
-
+        playerCards.clear();
     }
 }

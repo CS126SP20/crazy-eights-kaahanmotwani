@@ -13,6 +13,8 @@ public class GameEngine {
     private PlayerStrategyTwo playerC = new PlayerStrategyTwo();
     private PlayerStrategyTwo playerD = new PlayerStrategyTwo();
     private List<PlayerStrategy> listOfPlayers = new ArrayList<>(Arrays.asList(playerA, playerB, playerC, playerD));
+    private Card topCard;
+    private Card.Suit currentSuit;
     private static final int NUMBER_INITIAL_CARDS = 5;
     private static final int TOURNAMENT_WINNING_THRESHOLD = 200;
 
@@ -37,14 +39,15 @@ public class GameEngine {
     public void startGame() {
         shuffleCards();
         dealInitialCards();
-        playTournament();
-        checkGameOver();
-//        if (checkTournamentWinner() != null) {
-//            System.out.println(checkTournamentWinner().toString() + "wins!");
-//        }
+        setTopCard();
+        //while the game isn't over, rounds are played
+        while (!checkGameOver()) {
+            playRound();
+        }
+//        checkGameOver();
     }
     /**
-     * Shuffles an unshuffled deck of cards
+     * Shuffles a new, unshuffled deck of cards
      * @return A shuffled deck of cards
      */
     public List<Card> shuffleCards() {
@@ -72,34 +75,64 @@ public class GameEngine {
      * Adds a card from the draw pile into the discard pile to start the game
      * If it's an 8, then it shuffles the 8 into the draw pile and puts another card at top of discard pile
      */
-    public void playTournament() {
+    public void setTopCard() {
         if (!(drawPile.get(0).getRank() == Card.Rank.EIGHT)) {
             discardPile.add(drawPile.remove(0));
+            //top pile card is the top of the discard pile
+            topCard = discardPile.get(0);
+            currentSuit = topCard.getSuit();
         } else {
             Random random = new Random();
+            //reshuffling the 8
             drawPile.add(random.nextInt(), drawPile.get(0));
             discardPile.add(drawPile.remove(0));
+            //top pile card is the top of the discard pile
+            topCard = discardPile.get(0);
+            currentSuit = topCard.getSuit();
         }
     }
 
     /**
-     *
+     * Playing each round. Loops through the listOfPlayers and then checks if they should draw cards, and if not
+     * then they play a card and its added to the top of the discard pile, and updates the top card
      */
-    public void checkGameOver() {
-        //if players discarded all of their cards, they get points from the other player cards' totals
-        //Case of a tie (if the draw pile runs out and no one empties their hand), adds points of other players
+    public void playRound() {
         for (PlayerStrategy player: listOfPlayers) {
-            //if hand is empty, else-if draw pile is empty; in both cases players win points
-            if (mapOfPlayersToCards.get(player).size() == 0) {
-                addPointsToPlayer(player);
-            } else if (drawPile.isEmpty()) {
-                addPointsToPlayer(player);
+            if (player.shouldDrawCard(topCard, currentSuit)) {
+                player.receiveCard(drawPile.remove(0));
+            } else {
+                Card playedCard = player.playCard();
+                if (playedCard.getRank() == Card.Rank.EIGHT) {
+                    currentSuit = player.declareSuit();
+                }
+                //removes the card that the player played from their hand
+                mapOfPlayersToCards.get(player).remove(playedCard);
+                //adds the card that was played to the top of the discard pile
+                discardPile.add(0, playedCard);
+                topCard = discardPile.get(0);
             }
         }
     }
 
     /**
-     *
+     * If players discarded all of their cards, they get points from the other player cards' totals
+     * In case of a tie (if the draw pile runs out and no one empties their hand), adds points of other players
+     */
+    public boolean checkGameOver() {
+        for (PlayerStrategy player: listOfPlayers) {
+            //if hand is empty, or if draw pile is empty; in both cases, game over and players win points
+            if (mapOfPlayersToCards.get(player).size() == 0 || drawPile.isEmpty()) {
+                addPointsToPlayer(player);
+                //resets the game
+                resetGame();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds points to players, which in any case is the sum of the other players' hands
      * @param playerWhoWonPoints
      */
     public void addPointsToPlayer(PlayerStrategy playerWhoWonPoints) {
@@ -128,14 +161,25 @@ public class GameEngine {
 
     /**
      *
-     * @return
+     * @return The player strategy that got 200+ points and won the tournament
      */
     public PlayerStrategy checkTournamentWinner() {
         for (PlayerStrategy player: listOfPlayers) {
             if (mapOfPlayersToPoints.get(player) > 200) {
+                System.out.println(player.toString() + " wins!");
                 return player;
             }
         }
         return null;
+    }
+
+    /**
+     * Resets the game by clearing the players' cards and calling the reset function for each PlayerStrategy object
+     */
+    public void resetGame() {
+        for (PlayerStrategy player: listOfPlayers) {
+            mapOfPlayersToCards.get(player).clear();
+            player.reset();
+        }
     }
 }
