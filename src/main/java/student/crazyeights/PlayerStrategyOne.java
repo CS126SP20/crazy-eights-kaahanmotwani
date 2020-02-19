@@ -3,6 +3,7 @@ package student.crazyeights;
 import java.util.*;
 
 public class PlayerStrategyOne extends GeneralStrategy {
+
     /**
      * Looks for the highest point value in its hand in order to get rid of it
      * @return The card with the highest point value, which is this player's strategy

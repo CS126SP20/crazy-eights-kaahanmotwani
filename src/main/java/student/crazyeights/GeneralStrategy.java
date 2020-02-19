@@ -12,6 +12,10 @@ public abstract class GeneralStrategy implements PlayerStrategy {
         this.opponentIds = opponentIds;
     }
 
+    public List<Card> getPlayerCards() {
+        return playerCards;
+    }
+
     public void receiveInitialCards(List<Card> cards) {
         playerCards = cards;
     }
