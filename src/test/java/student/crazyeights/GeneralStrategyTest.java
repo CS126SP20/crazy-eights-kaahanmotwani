@@ -1,5 +1,6 @@
 package student.crazyeights;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,28 +16,10 @@ public class GeneralStrategyTest {
         deck = Card.getDeck();
     }
 
-    //making sure there are 5 cards initially
-    @Test
-    public void testNumberOfInitialCards() throws Exception {
-
-    }
-
-    //testing that a player can declare a suit when playing an '8'
-    @Test
-    public void testDeclareSuit() throws Exception {
-
-    }
-
-    //tests that a player receives a card when they choose to draw card from deck
-    @Test
-    public void testReceivedCard() throws Exception {
-
-    }
-
     //tests that a player can draw a card from the deck if they want
     @Test
-    public void testCanDrawCard() throws Exception {
-
+    public void testShouldDrawCard() throws Exception {
+//        Assert.assertEquals();
     }
 
 }

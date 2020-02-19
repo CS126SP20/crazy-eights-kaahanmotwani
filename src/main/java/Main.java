@@ -1,4 +1,4 @@
-import student.crazyeights.PlayerStrategy;
+import student.crazyeights.GameEngine;
 
 
 public class Main {

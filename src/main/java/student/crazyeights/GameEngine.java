@@ -1,3 +1,5 @@
+package student.crazyeights;
+
 import student.crazyeights.*;
 
 import java.util.*;
@@ -39,7 +41,7 @@ public class GameEngine {
         shuffleCards();
         dealInitialCards();
         setTopCard();
-        //while the game isn't over, rounds are played
+        //while the game isn't over and no one is cheating, rounds are played
         while (!checkGameOver()) {
             playRound();
         }
@@ -56,9 +58,10 @@ public class GameEngine {
     }
 
     /**
-     * Deals initial cards to players. Also stores it in a map in this class.
+     *
+     * @return
      */
-    public void dealInitialCards() {
+    public Map<PlayerStrategy, List<Card>> dealInitialCards() {
         for (PlayerStrategy player: listOfPlayers) {
             List<Card> initialCards = new ArrayList<>();
             for (int i = 0; i < NUMBER_INITIAL_CARDS; i++) {
@@ -67,13 +70,16 @@ public class GameEngine {
             player.receiveInitialCards(initialCards);
             mapOfPlayersToCards.put(player, initialCards);
         }
+        System.out.println("Initial cards were dealt!");
+        return mapOfPlayersToCards;
     }
 
     /**
      * Adds a card from the draw pile into the discard pile to start the game
      * If it's an 8, then it shuffles the 8 into the draw pile and puts another card at top of discard pile
+     * @return
      */
-    public void setTopCard() {
+    public Card setTopCard() {
         if (!(drawPile.get(0).getRank() == Card.Rank.EIGHT)) {
             discardPile.add(drawPile.remove(0));
             //top pile card is the top of the discard pile
@@ -89,6 +95,7 @@ public class GameEngine {
             topCard = discardPile.get(0);
             currentSuit = topCard.getSuit();
         }
+        return topCard;
     }
 
     /**
@@ -104,8 +111,15 @@ public class GameEngine {
                 player.receiveCard(drawPile.remove(0));
             } else {
                 Card playedCard = player.playCard();
+
                 if (playedCard.getRank() == Card.Rank.EIGHT) {
                     currentSuit = player.declareSuit();
+                }
+                //checking for cheating
+                if (checkIfCheating(playedCard, topCard, currentSuit)) {
+                    System.out.println("Someone cheated, the tournament is over!");
+                    System.exit(0);
+                    break;
                 }
                 //removes the card that the player played from their hand
                 mapOfPlayersToCards.get(player).remove(playedCard);
@@ -114,6 +128,7 @@ public class GameEngine {
                 topCard = discardPile.get(0);
             }
         }
+        System.out.println("A round was completed!!!!");
     }
 
     /**
@@ -124,10 +139,10 @@ public class GameEngine {
         for (PlayerStrategy player: listOfPlayers) {
             //if hand is empty, or if draw pile is empty; in both cases, game over and players win points
             if (mapOfPlayersToCards.get(player).size() == 0 || drawPile.isEmpty()) {
+                System.out.println("SOMEONE WON A GAME!!!!");
                 addPointsToPlayer(player);
                 //resets the game
                 resetGame();
-                System.out.println("SOMEONE WON A GAME!!!!");
                 return true;
             }
         }
@@ -185,5 +200,20 @@ public class GameEngine {
             mapOfPlayersToCards.get(player).clear();
             player.reset();
         }
+    }
+
+    /**
+     *
+     * @param playedCard
+     * @param topCard
+     * @param suit
+     * @return
+     */
+    public boolean checkIfCheating(Card playedCard, Card topCard, Card.Suit suit) {
+        if (!(playedCard.getSuit().equals(suit)) && !(playedCard.getRank().equals(topCard.getRank()))) {
+            return true;
+        }
+        boolean checkForEight = !playedCard.getSuit().equals(suit) && !playedCard.getRank().equals(Card.Rank.EIGHT);
+        return checkForEight;
     }
 }
