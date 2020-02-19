@@ -41,18 +41,9 @@ public class PlayerStrategyTwo extends GeneralStrategy {
         currentTopCard = topPileCard;
         //if your hand has a card with the same suit as the top card, then return false
         for (Card playerCard : playerCards) {
-            if (topPileCard.getRank().equals(playerCard.getRank())) {
+            if (topPileCard.getRank().equals(playerCard.getRank())
+                    || topPileCard.getRank().equals(playerCard.getSuit())) {
                 return false;
-            } else if (topPileCard.getRank().equals(playerCard.getSuit())) {
-                return false;
-            }
-        }
-        if (changedSuit != null) {
-            for (int i = 0; i < playerCards.size(); i++) {
-                if (playerCards.get(i).getRank().equals(topPileCard.getRank())
-                        && playerCards.get(i).getSuit().equals(topPileCard.getSuit())) {
-                    return false;
-                }
             }
         }
         return true;

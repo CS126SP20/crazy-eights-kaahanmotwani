@@ -10,12 +10,10 @@ import static org.junit.Assert.assertEquals;
 
 public class PlayerStrategyTwoTest {
     private List<Card> mockHand = new ArrayList<>();
-    private Card mockTopPileCard;
     private PlayerStrategyTwo player = new PlayerStrategyTwo();
 
     @Before
     public void populateMockDeck() {
-        mockTopPileCard = new Card(Card.Suit.HEARTS, Card.Rank.FIVE);
         mockHand.add(new Card(Card.Suit.HEARTS, Card.Rank.FIVE));
         mockHand.add(new Card(Card.Suit.HEARTS, Card.Rank.THREE));
         mockHand.add(new Card(Card.Suit.DIAMONDS, Card.Rank.SEVEN));
@@ -38,6 +36,12 @@ public class PlayerStrategyTwoTest {
     @Test
     public void testShouldDrawCardFalse() throws Exception {
         assertEquals(false, player.shouldDrawCard(new Card(Card.Suit.HEARTS, Card.Rank.SEVEN),
+                Card.Suit.HEARTS));
+    }
+
+    @Test
+    public void testShouldDrawCardTrue() throws Exception {
+        assertEquals(true, player.shouldDrawCard(new Card(Card.Suit.CLUBS, Card.Rank.ACE),
                 Card.Suit.HEARTS));
     }
 }

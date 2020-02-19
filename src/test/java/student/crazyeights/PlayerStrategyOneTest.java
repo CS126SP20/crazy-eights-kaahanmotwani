@@ -11,13 +11,11 @@ import java.util.List;
 
 public class PlayerStrategyOneTest {
     private List<Card> mockHand = new ArrayList<>();
-    private Card mockTopPileCard;
     private GeneralStrategy player = new PlayerStrategyOne();
     private List<Card> playerHand = player.getPlayerCards();
 
     @Before
     public void populateMockDeck() {
-        mockTopPileCard = new Card(Card.Suit.HEARTS, Card.Rank.FIVE);
         mockHand.add(new Card(Card.Suit.HEARTS, Card.Rank.FIVE));
         mockHand.add(new Card(Card.Suit.HEARTS, Card.Rank.THREE));
         mockHand.add(new Card(Card.Suit.DIAMONDS, Card.Rank.SEVEN));
@@ -40,6 +38,12 @@ public class PlayerStrategyOneTest {
     @Test
     public void testShouldDrawCardFalse() throws Exception {
         assertEquals(false, player.shouldDrawCard(new Card(Card.Suit.HEARTS, Card.Rank.SEVEN),
+                Card.Suit.HEARTS));
+    }
+
+    @Test
+    public void testShouldDrawCardTrue() throws Exception {
+        assertEquals(true, player.shouldDrawCard(new Card(Card.Suit.CLUBS, Card.Rank.TWO),
                 Card.Suit.HEARTS));
     }
 
