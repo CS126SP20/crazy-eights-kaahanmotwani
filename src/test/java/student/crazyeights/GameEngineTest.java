@@ -16,16 +16,16 @@ public class GameEngineTest {
 
     @Test
     public void testDealInitialCards() throws Exception {
-//        List<Card> testListOfCards = new ArrayList<>(5);
-//        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.ACE));
-//        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.TWO));
-//        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.THREE));
-//        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.FOUR));
-//        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.FIVE));
-//        Map<PlayerStrategy, List<Card>> initialCardTestMap = new HashMap<>();
-//        PlayerStrategy player = new PlayerStrategyOne();
-//        initialCardTestMap.put(player, testListOfCards);
-//        assertEquals(initialCardTestMap, gameEngine.dealInitialCards());
+        List<Card> testListOfCards = new ArrayList<>(5);
+        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.ACE));
+        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.TWO));
+        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.THREE));
+        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.FOUR));
+        testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.FIVE));
+        Map<PlayerStrategy, List<Card>> initialCardTestMap = new HashMap<>();
+        PlayerStrategy player = new PlayerStrategyOne();
+        initialCardTestMap.put(player, testListOfCards);
+        assertEquals(initialCardTestMap, gameEngine.dealInitialCards());
     }
 
     @Test

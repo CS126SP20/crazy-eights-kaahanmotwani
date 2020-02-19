@@ -20,7 +20,8 @@ public class GameEngine {
     private static final int TOURNAMENT_WINNING_THRESHOLD = 200;
 
     /**
-     * Starts a new tournament by assigning playerIds and giving each player 0 points
+     * Starts a new tournament by assigning playerIds and giving each player 0 points, then calling startGame
+     * until a tournament winner has been declared
      */
     public void startTournament() {
         playerA.init(1, new ArrayList<Integer>(Arrays.asList(2, 3, 4)));
@@ -35,7 +36,8 @@ public class GameEngine {
         }
     }
     /**
-     * Starts a new game initially and assigns playerIds
+     * Starts a new game initially by shuffling cards, dealing initial cards, and setting the top card
+     * Then, it plays rounds until the game is over
      */
     public void startGame() {
         shuffleCards();
@@ -58,8 +60,8 @@ public class GameEngine {
     }
 
     /**
-     *
-     * @return
+     * Deals the (5) initial cards to each player from the shuffled deck
+     * @return a Map of players to cards, after getting initial cards. Returns map for testing purposes
      */
     public Map<PlayerStrategy, List<Card>> dealInitialCards() {
         for (PlayerStrategy player: listOfPlayers) {
@@ -115,25 +117,22 @@ public class GameEngine {
                 if (playedCard.getRank() == Card.Rank.EIGHT) {
                     currentSuit = player.declareSuit();
                 }
-                //checking for cheating
-                if (checkIfCheating(playedCard, topCard, currentSuit)) {
-                    System.out.println("Someone cheated, the tournament is over!");
-                    System.exit(0);
-                    break;
-                }
                 //removes the card that the player played from their hand
                 mapOfPlayersToCards.get(player).remove(playedCard);
                 //adds the card that was played to the top of the discard pile
                 discardPile.add(0, playedCard);
                 topCard = discardPile.get(0);
+                currentSuit = topCard.getSuit();
             }
         }
-        System.out.println("A round was completed!!!!");
+        System.out.println("A round was completed!");
     }
 
     /**
      * If players discarded all of their cards, they get points from the other player cards' totals
      * In case of a tie (if the draw pile runs out and no one empties their hand), adds points of other players
+     * Both of the above cases are when the game is over, so returns true and false otherwise
+     * @return if the game is over or not
      */
     public boolean checkGameOver() {
         for (PlayerStrategy player: listOfPlayers) {
@@ -151,7 +150,7 @@ public class GameEngine {
 
     /**
      * Adds points to players, which in any case is the sum of the other players' hands
-     * @param playerWhoWonPoints
+     * @param playerWhoWonPoints the player who needs points added to their score
      */
     public void addPointsToPlayer(PlayerStrategy playerWhoWonPoints) {
         //total points is the points the player has in the map
@@ -165,9 +164,9 @@ public class GameEngine {
     }
 
     /**
-     *
-     * @param cards
-     * @return
+     * Sums the points of a player's hand
+     * @param cards the cards in a player's hand, from the map of players to their cards
+     * @return The sum of point values in a player's hand
      */
     public int sumPlayerHandPoints(List<Card> cards) {
         int points = 0;
@@ -178,7 +177,7 @@ public class GameEngine {
     }
 
     /**
-     *
+     * Checks if the tournament is over based on total points of each player
      * @return The player strategy that got 200+ points and won the tournament
      */
     public PlayerStrategy checkTournamentWinner() {
@@ -213,7 +212,6 @@ public class GameEngine {
         if (!(playedCard.getSuit().equals(suit)) && !(playedCard.getRank().equals(topCard.getRank()))) {
             return true;
         }
-        boolean checkForEight = !playedCard.getSuit().equals(suit) && !playedCard.getRank().equals(Card.Rank.EIGHT);
-        return checkForEight;
+        return false;
     }
 }

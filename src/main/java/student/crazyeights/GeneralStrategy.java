@@ -15,26 +15,6 @@ public abstract class GeneralStrategy implements PlayerStrategy {
         playerCards = cards;
     }
 
-    public boolean shouldDrawCard(Card topPileCard, Card.Suit changedSuit) {
-        //if your hand has a card with the same suit as the top card, then return false
-        for (int i = 0; i < playerCards.size(); i++) {
-            if (topPileCard.getRank().equals(playerCards.get(i).getRank())) {
-                return false;
-            } else if (topPileCard.getRank().equals(playerCards.get(i).getSuit())) {
-                return false;
-            }
-        }
-        if (changedSuit != null) {
-            for (int i = 0; i < playerCards.size(); i++) {
-                if (playerCards.get(i).getRank().equals(topPileCard.getRank())
-                        && playerCards.get(i).getSuit().equals(topPileCard.getSuit())) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public void receiveCard(Card drawnCard) {
         playerCards.add(drawnCard);
     }
