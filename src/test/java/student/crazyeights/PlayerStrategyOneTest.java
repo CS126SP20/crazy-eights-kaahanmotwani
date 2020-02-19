@@ -34,7 +34,7 @@ public class PlayerStrategyOneTest {
 
     @Test
     public void testDeclareSuit() throws Exception {
-
+        assertEquals(Card.Suit.HEARTS, player.declareSuit());
     }
 
     @Test
