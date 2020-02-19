@@ -38,7 +38,7 @@ public class PlayerStrategyOneTest {
     }
 
     @Test
-    public void testShouldDrawCard() throws Exception {
+    public void testShouldDrawCardFalse() throws Exception {
         assertEquals(false, player.shouldDrawCard(new Card(Card.Suit.HEARTS, Card.Rank.SEVEN),
                 Card.Suit.HEARTS));
     }

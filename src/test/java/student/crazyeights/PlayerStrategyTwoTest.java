@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class PlayerStrategyTwoTest {
     private List<Card> mockHand = new ArrayList<>();
     private Card mockTopPileCard;
-    private PlayerStrategyOne player = new PlayerStrategyOne();
+    private PlayerStrategyTwo player = new PlayerStrategyTwo();
 
     @Before
     public void populateMockDeck() {
@@ -19,10 +19,25 @@ public class PlayerStrategyTwoTest {
         mockHand.add(new Card(Card.Suit.HEARTS, Card.Rank.FIVE));
         mockHand.add(new Card(Card.Suit.HEARTS, Card.Rank.THREE));
         mockHand.add(new Card(Card.Suit.DIAMONDS, Card.Rank.SEVEN));
+        mockHand.add(new Card(Card.Suit.HEARTS, Card.Rank.NINE));
+        mockHand.add(new Card(Card.Suit.SPADES, Card.Rank.FIVE));
+        player.receiveInitialCards(mockHand);
     }
 
     @Test
-    public void testShouldDrawCard() throws Exception {
-        assertEquals(false, player.shouldDrawCard(mockTopPileCard, Card.Suit.HEARTS));
+    public void testPlayCard() throws Exception {
+        player.shouldDrawCard(new Card(Card.Suit.HEARTS, Card.Rank.SEVEN), Card.Suit.HEARTS);
+        assertEquals(new Card(Card.Suit.HEARTS, Card.Rank.FIVE), player.playCard());
+    }
+
+    @Test
+    public void testDeclareSuit() throws Exception {
+        assertEquals(Card.Suit.HEARTS, player.declareSuit());
+    }
+
+    @Test
+    public void testShouldDrawCardFalse() throws Exception {
+        assertEquals(false, player.shouldDrawCard(new Card(Card.Suit.HEARTS, Card.Rank.SEVEN),
+                Card.Suit.HEARTS));
     }
 }
