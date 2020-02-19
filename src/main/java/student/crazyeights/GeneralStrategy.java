@@ -6,6 +6,7 @@ public abstract class GeneralStrategy implements PlayerStrategy {
     private int playerId;
     private List<Integer> opponentIds;
     protected List<Card> playerCards;
+    protected Card currentTopCard;
     public void init(int playerId, List<Integer> opponentIds) {
         this.playerId = playerId;
         this.opponentIds = opponentIds;

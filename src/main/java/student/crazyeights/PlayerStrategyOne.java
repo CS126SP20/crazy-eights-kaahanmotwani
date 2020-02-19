@@ -11,7 +11,8 @@ public class PlayerStrategyOne extends GeneralStrategy {
         int highestPointValue = 0;
         Card playThisCard = playerCards.get(0);
         for (Card card: playerCards) {
-            if (card.getPointValue() > highestPointValue) {
+            if (card.getPointValue() > highestPointValue && (currentTopCard.getSuit().equals(card.getSuit())
+                    || currentTopCard.getRank().equals(card.getRank()))) {
                 highestPointValue = card.getPointValue();
                 playThisCard = card;
             }
@@ -48,6 +49,7 @@ public class PlayerStrategyOne extends GeneralStrategy {
      * @return
      */
     public boolean shouldDrawCard(Card topPileCard, Card.Suit changedSuit) {
+        currentTopCard = topPileCard;
         //if your hand has a card with the same suit as the top card, then return false
         for (Card playerCard : playerCards) {
             if (topPileCard.getRank().equals(playerCard.getRank())

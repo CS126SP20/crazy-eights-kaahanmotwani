@@ -5,11 +5,19 @@ import java.util.List;
 
 public class PlayerStrategyTwo extends GeneralStrategy {
     /**
-     * Dumb player, plays the first card in hand
+     * Dumb player, plays the first card in hand that is valid
      * @return the first card in hand
      */
     public Card playCard() {
-        return playerCards.get(0);
+        Card playThisCard = null;
+        for (Card card : playerCards) {
+            if (card.getRank().equals(currentTopCard.getRank()) || card.getSuit().equals(currentTopCard.getSuit())) {
+                playThisCard = card;
+                playerCards.remove(card);
+                break;
+            }
+        }
+        return playThisCard;
     }
 
     /**
@@ -30,6 +38,7 @@ public class PlayerStrategyTwo extends GeneralStrategy {
      * @return
      */
     public boolean shouldDrawCard(Card topPileCard, Card.Suit changedSuit) {
+        currentTopCard = topPileCard;
         //if your hand has a card with the same suit as the top card, then return false
         for (Card playerCard : playerCards) {
             if (topPileCard.getRank().equals(playerCard.getRank())) {

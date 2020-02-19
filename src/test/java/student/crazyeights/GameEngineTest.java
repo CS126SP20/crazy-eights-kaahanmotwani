@@ -13,38 +13,24 @@ import static org.junit.Assert.assertEquals;
 public class GameEngineTest {
 
     private GameEngine gameEngine = new GameEngine();
+    private List<Card> testListOfCards = new ArrayList<>(5);
 
-    @Test
-    public void testDealInitialCards() throws Exception {
-        List<Card> testListOfCards = new ArrayList<>(5);
+    @Before
+    public void createMockList() throws Exception {
         testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.ACE));
         testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.TWO));
         testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.THREE));
         testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.FOUR));
         testListOfCards.add(new Card(Card.Suit.HEARTS, Card.Rank.FIVE));
-        Map<PlayerStrategy, List<Card>> initialCardTestMap = new HashMap<>();
-        PlayerStrategy player = new PlayerStrategyOne();
-        initialCardTestMap.put(player, testListOfCards);
-        assertEquals(initialCardTestMap, gameEngine.dealInitialCards());
-    }
-
-    @Test
-    public void testSetTopCard() throws Exception {
-
-    }
-
-    @Test
-    public void testGameOver() throws Exception {
-
     }
 
     @Test
     public void testSumPlayerHandPoints() throws Exception {
-
+        int points = 0;
+        for (Card card : testListOfCards) {
+            points += card.getPointValue();
+        }
+        assertEquals(points, gameEngine.sumPlayerHandPoints(testListOfCards));
     }
 
-    @Test
-    public void testTournamentWinner() throws Exception {
-
-    }
 }
